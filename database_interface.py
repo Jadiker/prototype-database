@@ -32,6 +32,8 @@ class DatabaseInterface:
         try:
             self.load()
             yield self._database
+        except Exception:
+            raise
         finally:
             self.save()
 
@@ -107,7 +109,7 @@ class DatabaseInterface:
             print("Failed to obtain formatted date and time!")
             formatted_date_and_time = "UnknownTime"
 
-        save_file = os.path.join(self.save_folder, "db_sv_" + formatted_date_and_time + ".pkl")
+        save_file = os.path.normpath(os.path.join(self.save_folder, "db_sv_" + formatted_date_and_time + ".pkl"))
         with open(save_file, "wb+") as open_save_file:
             # save the data to a file
             pickle.dump(self._database, open_save_file)
